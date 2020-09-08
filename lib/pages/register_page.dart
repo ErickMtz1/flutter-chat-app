@@ -1,14 +1,16 @@
-import 'dart:convert';
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import 'package:chat/helpers/mostrar_alerta.dart';
-import 'package:chat/services/auth_service.dart';
+
 import 'package:chat/widgets/custom_boton_azul.dart';
-import 'package:flutter/material.dart';
+
+import 'package:chat/services/socket_service.dart';
+import 'package:chat/services/auth_service.dart';
 
 import 'package:chat/widgets/custom_labels.dart';
 import 'package:chat/widgets/custom_logo.dart';
 import 'package:chat/widgets/custom_input.dart';
-import 'package:provider/provider.dart';
 
 class RegisterPage extends StatelessWidget {
   @override
@@ -56,6 +58,7 @@ class __FormState extends State<_Form> {
   @override
   Widget build(BuildContext context) {
     final authService = Provider.of<AuthService>(context);
+    final socketService = Provider.of<SocketService>(context);
 
     return Container(
       margin: EdgeInsets.only(top: 40.0),
@@ -91,6 +94,7 @@ class __FormState extends State<_Form> {
                         passwordCtrl.text.trim());
 
                     if (registerOk == true) {
+                      socketService.connect();
                       Navigator.pushReplacementNamed(context, 'usuarios');
                     } else {
                       mostrarAlerta(context, 'Registro incorrecto', registerOk);
